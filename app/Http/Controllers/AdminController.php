@@ -63,7 +63,7 @@ class AdminController extends Controller
         $complaint->status = $request->status;
         $complaint->save();
         $complaintUser = $complaint->user->email;
-        dispatch(new SendStatusUpdatedJob($complaint, $complaintUser));
+        dispatch(new SendStatusUpdatedJob($complaint, $complaintUser, $complaint->user->phone));
         return response()->json([
             'status' => 1,
             'message'=> 'Record has been updated successfully'
@@ -76,7 +76,7 @@ class AdminController extends Controller
         $noOfRecords = Complaints::whereIn('id', $ids)->update(['status' => 'Unassigned Complaints']);
         $complaints = Complaints::whereIn('id', $ids)->get();
         foreach($complaints as $complaint){
-            dispatch(new SendStatusUpdatedJob($complaint, $complaint->user->email));
+            dispatch(new SendStatusUpdatedJob($complaint, $complaint->user->email,$complaint->user->phone));
         }
         return redirect()->route('adminComplaints')->with('success', $noOfRecords.' Records Updated Successfully');
     }
@@ -86,7 +86,7 @@ class AdminController extends Controller
         $noOfRecords = Complaints::whereIn('id', $ids)->update(['status' => 'Active Complaints']);
         $complaints = Complaints::whereIn('id', $ids)->get();
         foreach($complaints as $complaint){
-            dispatch(new SendStatusUpdatedJob($complaint, $complaint->user->email));
+            dispatch(new SendStatusUpdatedJob($complaint, $complaint->user->email,$complaint->user->phone));
         }
         return redirect()->route('adminComplaints')->with('success', $noOfRecords.' Records Updated Successfully');
     }
@@ -96,7 +96,7 @@ class AdminController extends Controller
         $noOfRecords = Complaints::whereIn('id', $ids)->update(['status' => 'Resolved complaints']);
         $complaints = Complaints::whereIn('id', $ids)->get();
         foreach($complaints as $complaint){
-            dispatch(new SendStatusUpdatedJob($complaint, $complaint->user->email));
+            dispatch(new SendStatusUpdatedJob($complaint, $complaint->user->email,$complaint->user->phone));
         }
         return redirect()->route('adminComplaints')->with('success', $noOfRecords.' Records Updated Successfully');
     }
