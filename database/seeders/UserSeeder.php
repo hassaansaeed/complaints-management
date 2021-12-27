@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
                 'name'  => $value[0],
                 'email' => $value[1],
                 'role'  => $value[2],
+                'phone'=>'+923127761626',
                 'password' => bcrypt('password'),
                 'email_verified_at' => Carbon::now()->toDateTimeString(),
                 'created_at' => Carbon::now()->toDateTimeString(),
